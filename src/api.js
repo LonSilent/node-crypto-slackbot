@@ -35,7 +35,7 @@ async function getBinancePrice() {
       price: x[1].USDT.PRICE.slice(2),
       highOf24hr: x[1].USDT.HIGH24HOUR.slice(2),
       lowOf24hr: x[1].USDT.LOW24HOUR.slice(2),
-      Percentage: addPlus(x[1].USDT.CHANGEPCT24HOUR)
+      percentage: addPlus(x[1].USDT.CHANGEPCT24HOUR)
     };
   });
   // console.log(resultMapping);

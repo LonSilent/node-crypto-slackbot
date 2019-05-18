@@ -5,7 +5,8 @@
   "author": "LonSilent",
   "license": "MIT",
   "scripts": {
-    "api": "babel-node ./src/test.api.js"
+    "api": "babel-node ./src/test.api.js",
+    "start": "babel-node index.js"
   },
   "dependencies": {
     "@babel/cli": "^7.4.4",
