@@ -6,7 +6,9 @@
   "license": "MIT",
   "scripts": {
     "api": "babel-node ./src/test.api.js",
-    "start": "babel-node index.js"
+    "start": "babel-node index.js",
+    "docker-build": "sudo docker build -t crypto-slackbot .",
+    "docker-run": "sudo docker run -it crypto-slackbot"
   },
   "dependencies": {
     "@babel/cli": "^7.4.4",

@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const coinList = ["BTC", "ETH", "XRP", "BNB"];
+
 function addPlus(str) {
   return !str.includes("-") ? `(+${str}%)` : `(${str}%)`;
 }
@@ -20,7 +22,6 @@ async function getPrice(symbol) {
 }
 
 async function getBinancePrice() {
-  const coinList = ["BTC", "ETH", "XRP"];
   const response = await axios.get(
     `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${coinList.join(
       ","
