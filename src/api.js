@@ -5,6 +5,12 @@ function addPlus(str) {
   return !str.includes("-") ? `(+${str}%)` : `(${str}%)`;
 }
 
+function toFixedTwo(str) {
+  return Number(str)
+    .toFixed(2)
+    .toString();
+}
+
 async function getPrice(symbol) {
   const upperSymbol = symbol.toUpperCase();
   const response = await axios.get(
@@ -43,4 +49,26 @@ async function getBinancePrice() {
   return resultMapping;
 }
 
-export { getPrice, getBinancePrice };
+async function getBitoPrice() {
+  const response = (await Promise.all([
+    axios.get(`https://api.bitopro.com/v2/tickers/btc_twd`),
+    axios.get(`https://api.bitopro.com/v2/tickers/eth_twd`)
+  ]))
+    .filter(e => e.status === 200)
+    .map(e => e.data.data);
+  if (response.length === 0) {
+    return undefined;
+  }
+  const resultMapping = response.map(x => {
+    return {
+      symbol: x.pair,
+      price: toFixedTwo(x.lastPrice),
+      highOf24hr: toFixedTwo(x.high24hr),
+      lowOf24hr: toFixedTwo(x.low24hr),
+      percentage: addPlus(x.priceChange24hr)
+    };
+  });
+  return resultMapping;
+}
+
+export { getPrice, getBinancePrice, getBitoPrice };
