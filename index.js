@@ -1,5 +1,5 @@
 import slackBot from "slackbots";
-import { SLACK_BOT_TOKEN } from "./src/const";
+import { SLACK_BOT_TOKEN } from "./src/slackAuthToken";
 import { getBinancePrice, getPrice } from "./src/api";
 
 const bot = new slackBot({

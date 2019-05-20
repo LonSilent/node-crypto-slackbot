@@ -1,6 +1,5 @@
 import axios from "axios";
-
-const coinList = ["BTC", "ETH", "XRP", "BNB"];
+import { coinList } from "./const";
 
 function addPlus(str) {
   return !str.includes("-") ? `(+${str}%)` : `(${str}%)`;

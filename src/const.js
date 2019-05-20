@@ -1,3 +1,3 @@
-const SLACK_BOT_TOKEN = "";
+const coinList = ["BTC", "ETH", "XRP", "BNB"];
 
-export { SLACK_BOT_TOKEN };
+export { coinList };
