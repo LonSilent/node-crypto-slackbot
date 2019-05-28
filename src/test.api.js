@@ -1,10 +1,11 @@
-import { getPrice, getBinancePrice, getBitoPrice } from "./api";
+import { getPrice, getBinancePrice, getBitoPrice, getBitmexPrice } from "./api";
 
 async function main() {
   const result = await Promise.all([
     getPrice("eth"),
     getBinancePrice(),
-    getBitoPrice()
+    getBitoPrice(),
+    getBitmexPrice()
   ]);
 
   console.log(result);

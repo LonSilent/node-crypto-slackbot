@@ -1,6 +1,11 @@
 import slackBot from "slackbots";
 import { SLACK_BOT_TOKEN } from "./src/slackAuthToken";
-import { getBinancePrice, getPrice, getBitoPrice } from "./src/api";
+import {
+  getBinancePrice,
+  getPrice,
+  getBitoPrice,
+  getBitmexPrice
+} from "./src/api";
 
 const bot = new slackBot({
   token: SLACK_BOT_TOKEN,
@@ -13,25 +18,22 @@ const params = {
 
 bot.on("message", async data => {
   if (data.type === "message") {
-    // console.log(data);
     const message = data.text.toLowerCase();
     // get api with cryptocompare
     if (message.startsWith("bot")) {
       const splitMessage = message.split(" ");
       if (splitMessage.length > 1) {
         const target = splitMessage.slice(1);
-        // console.log(target);
         const price = (await Promise.all(target.map(x => getPrice(x)))).filter(
           x => x !== undefined
         );
         console.log("=====================");
-        console.log("symbol price\n,", price);
+        console.log("symbol price\n", price);
         console.log("=====================");
         const result = price
           .map(x => `${x.symbol.toUpperCase()}\n[USD] ${x.USD}\n[BTC] ${x.BTC}`)
           .join("\n")
           .trim();
-        // console.log("result", result);
         bot.postMessage(data.channel, result, params);
       } else {
         const price = await getBinancePrice();
@@ -52,8 +54,15 @@ bot.on("message", async data => {
         }
       }
     }
-    // get api with bitopro
-    else if (message.startsWith("bito")) {
+  }
+});
+
+bot.on("message", async data => {
+  if (data.type === "message") {
+    // console.log(data);
+    const message = data.text.toLowerCase();
+    // get api with cryptocompare
+    if (message.startsWith("bito")) {
       const price = await getBitoPrice();
       console.log("=====================");
       console.log("bito price\n", price);
@@ -68,7 +77,30 @@ bot.on("message", async data => {
           )
           .join("\n")
           .trim();
-        // console.log("result", result);
+        bot.postMessage(data.channel, result, params);
+      }
+    }
+  }
+});
+
+bot.on("message", async data => {
+  if (data.type === "message") {
+    const message = data.text.toLowerCase();
+    if (message.startsWith("mex")) {
+      const price = await getBitmexPrice();
+      console.log("=====================");
+      console.log("mex price\n", price);
+      console.log("=====================");
+      if (price) {
+        const result = price
+          .map(
+            x =>
+              `${x.symbol.toUpperCase()}\n[price] ${x.price}\n[high_24hr] ${
+                x.highOf24hr
+              }\n[low_24hr] ${x.lowOf24hr}`
+          )
+          .join("\n")
+          .trim();
         bot.postMessage(data.channel, result, params);
       }
     }

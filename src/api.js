@@ -71,4 +71,41 @@ async function getBitoPrice() {
   return resultMapping;
 }
 
-export { getPrice, getBinancePrice, getBitoPrice };
+async function getBitmexPrice() {
+  const response = (await Promise.all([
+    axios.get(
+      `https://www.bitmex.com/api/v1/trade/bucketed?symbol=XBTUSD&binSize=1m&partial=true&count=1&reverse=true`
+    ),
+    axios.get(
+      `https://www.bitmex.com/api/v1/trade/bucketed?symbol=XBTUSD&binSize=1d&partial=true&count=1&reverse=true`
+    ),
+    axios.get(
+      `https://www.bitmex.com/api/v1/trade/bucketed?symbol=ETHUSD&binSize=1m&partial=true&count=1&reverse=true`
+    ),
+    axios.get(
+      `https://www.bitmex.com/api/v1/trade/bucketed?symbol=ETHUSD&binSize=1d&partial=true&count=1&reverse=true`
+    )
+  ])).map(e => e.data[0]);
+
+  console.log(response[0]);
+
+  const XBT = {
+    symbol: "XBTUSD",
+    price: response[0].open,
+    highOf24hr: response[1].high,
+    lowOf24hr: response[1].low,
+    percentage: ""
+  };
+
+  const ETH = {
+    symbol: "ETHUSD",
+    price: response[2].open,
+    highOf24hr: response[3].high,
+    lowOf24hr: response[3].low,
+    percentage: ""
+  };
+
+  return [XBT, ETH];
+}
+
+export { getPrice, getBinancePrice, getBitoPrice, getBitmexPrice };
