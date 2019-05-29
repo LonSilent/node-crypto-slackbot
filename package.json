@@ -7,6 +7,7 @@
   "scripts": {
     "api": "babel-node ./src/test.api.js",
     "start": "babel-node index.js",
+    "alert": "babel-node alert.js",
     "docker-build": "sudo docker build -t crypto-slackbot .",
     "docker-run": "sudo docker run -it crypto-slackbot"
   },
@@ -16,6 +17,7 @@
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.4.4",
     "axios": "^0.18.0",
+    "moment": "^2.24.0",
     "slackbots": "^1.2.0"
   }
 }
