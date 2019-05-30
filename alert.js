@@ -7,7 +7,8 @@ import {
   trackSymbol,
   aboveTarget,
   belowTarget,
-  userToNotify
+  userToNotify,
+  targetMove
 } from "./src/const";
 
 const bot = new slackBot({
@@ -28,32 +29,45 @@ bot.on("start", function() {
     const price = await getPrice(trackSymbol);
     // console.log(price, moment().format("llll"));
     if (price && price.USD <= belowPrice) {
-      // console.log(
-      //   `${trackSymbol.toUpperCase()} 跌到 ${belowPrice} 以下囉~買起來買起來`
-      // );
+      console.log(
+        `在 ${moment().format(
+          "lll"
+        )} 的時候，${trackSymbol.toUpperCase()} 跌到 ${belowPrice} 以下囉~買起來買起來`
+      );
       bot.postMessageToUser(
         userToNotify,
         `在 ${moment().format(
-          "llll"
+          "lll"
         )} 的時候，${trackSymbol.toUpperCase()} 跌到 ${belowPrice} 以下囉~買起來買起來`,
         params
       );
-      belowPrice -= 10;
+      belowPrice -= targetMove;
+      bot.postMessageToUser(
+        userToNotify,
+        `Next notification will be at price: ${belowPrice}`,
+        params
+      );
       // console.log(belowPrice);
     }
     if (price && price.USD >= abovePrice) {
-      // console.log(
-      //   `${trackSymbol.toUpperCase()} 漲到 ${abovePrice} 以上辣~虎阿起來嗨!!!`
-      // );
+      console.log(
+        `在 ${moment().format(
+          "lll"
+        )} 的時候，${trackSymbol.toUpperCase()} 漲到 ${abovePrice} 以上辣~虎阿起來嗨!!!`
+      );
       bot.postMessageToUser(
         userToNotify,
         `在 ${moment().format(
-          "llll"
+          "lll"
         )} 的時候，${trackSymbol.toUpperCase()} 漲到 ${abovePrice} 以上辣~虎阿起來嗨!!!`,
         params
       );
-      abovePrice += 10;
-      // console.log(abovePrice);
+      abovePrice += targetMove;
+      bot.postMessageToUser(
+        userToNotify,
+        `Next notification will be at price: ${abovePrice}`,
+        params
+      );
     }
   }, syncMinute * 60 * 1000);
 });
