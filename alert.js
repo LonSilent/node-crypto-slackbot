@@ -38,15 +38,16 @@ bot.on("start", function() {
         userToNotify,
         `在 ${moment().format(
           "lll"
-        )} 的時候，${trackSymbol.toUpperCase()} 跌到 ${belowPrice} 以下囉~買起來買起來`,
+        )} 的時候，${trackSymbol.toUpperCase()} 跌到 ${belowPrice} 以下囉~買起來買起來\nNext notification will be at price: ${belowPrice -
+          targetMove}`,
         params
       );
       belowPrice -= targetMove;
-      bot.postMessageToUser(
-        userToNotify,
-        `Next notification will be at price: ${belowPrice}`,
-        params
-      );
+      // bot.postMessageToUser(
+      //   userToNotify,
+      //   `Next notification will be at price: ${belowPrice}`,
+      //   params
+      // );
       // console.log(belowPrice);
     }
     if (price && price.USD >= abovePrice) {
@@ -59,15 +60,16 @@ bot.on("start", function() {
         userToNotify,
         `在 ${moment().format(
           "lll"
-        )} 的時候，${trackSymbol.toUpperCase()} 漲到 ${abovePrice} 以上辣~虎阿起來嗨!!!`,
+        )} 的時候，${trackSymbol.toUpperCase()} 漲到 ${abovePrice} 以上辣~虎阿起來嗨!!!\nNext notification will be at price: ${abovePrice +
+          targetMove}`,
         params
       );
       abovePrice += targetMove;
-      bot.postMessageToUser(
-        userToNotify,
-        `Next notification will be at price: ${abovePrice}`,
-        params
-      );
+      // bot.postMessageToUser(
+      //   userToNotify,
+      //   `Next notification will be at price: ${abovePrice}`,
+      //   params
+      // );
     }
   }, syncMinute * 60 * 1000);
 });

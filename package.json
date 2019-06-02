@@ -5,9 +5,9 @@
   "author": "LonSilent",
   "license": "MIT",
   "scripts": {
-    "api": "babel-node ./src/test.api.js",
-    "start": "babel-node index.js",
-    "alert": "babel-node alert.js",
+    "test-api": "babel-node ./src/test.api.js",
+    "bot": "forever -c babel-node priceBot.js",
+    "alert": "forever --watch --watchDirectory ./src -c babel-node alert.js",
     "docker-build": "sudo docker build -t crypto-slackbot .",
     "docker-run": "sudo docker run -it crypto-slackbot"
   },
@@ -19,5 +19,8 @@
     "axios": "^0.18.0",
     "moment": "^2.24.0",
     "slackbots": "^1.2.0"
+  },
+  "devDependencies": {
+    "forever": "^1.0.0"
   }
 }
