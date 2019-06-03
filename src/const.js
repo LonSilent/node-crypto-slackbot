@@ -8,6 +8,8 @@ let aboveTarget = 270;
 const userToNotify = "lonsilent";
 const targetMove = 5;
 
+const apiKey = "";
+
 export { coinList };
 export {
   syncMinute,
@@ -15,5 +17,6 @@ export {
   belowTarget,
   aboveTarget,
   userToNotify,
-  targetMove
+  targetMove,
+  apiKey
 };

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { coinList } from "./const";
+import { coinList, apiKey } from "./const";
 
 function addPlus(str) {
   return !str.includes("-") ? `(+${str}%)` : `(${str}%)`;
@@ -14,7 +14,7 @@ function toFixedTwo(str) {
 async function getPrice(symbol) {
   const upperSymbol = symbol.toUpperCase();
   const response = await axios.get(
-    `https://min-api.cryptocompare.com/data/pricemulti?fsyms=${upperSymbol}&tsyms=USD,BTC`
+    `https://min-api.cryptocompare.com/data/pricemulti?fsyms=${upperSymbol}&tsyms=USD,BTC&api_key=${apiKey}`
   );
   if (!response.data === undefined || response.data.HasWarning) {
     return undefined;
@@ -30,7 +30,7 @@ async function getBinancePrice() {
   const response = await axios.get(
     `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${coinList.join(
       ","
-    )}&tsyms=USDT&e=Binance`
+    )}&tsyms=USDT&e=Binance&api_key=${apiKey}`
   );
   if (!response.data === undefined || response.data.HasWarning) {
     return undefined;
