@@ -2,14 +2,7 @@ import slackBot from "slackbots";
 import { SLACK_BOT_TOKEN } from "./src/slackAuthToken";
 import { getPrice } from "./src/api";
 import moment from "moment";
-import {
-  syncMinute,
-  trackSymbol,
-  aboveTarget,
-  belowTarget,
-  userToNotify,
-  targetMove
-} from "./src/const";
+import { syncMinute, userToNotify, alertObj } from "./src/const";
 
 const bot = new slackBot({
   token: SLACK_BOT_TOKEN,
@@ -20,56 +13,65 @@ const params = {
   icon_emoji: ":miku2:"
 };
 
-let belowPrice = belowTarget;
-let abovePrice = aboveTarget;
+let alertPrice = alertObj;
+
+async function alertCheck(obj, index) {
+  const price = await getPrice(obj.trackSymbol);
+  if (price && price.USD <= obj.belowTarget) {
+    console.log(
+      `在 ${moment().format(
+        "lll"
+      )} 的時候，${obj.trackSymbol.toUpperCase()} 跌到 ${
+        obj.belowTarget
+      } 以下囉~買起來買起來`
+    );
+    bot.postMessageToUser(
+      userToNotify,
+      `在 ${moment().format(
+        "lll"
+      )} 的時候，${obj.trackSymbol.toUpperCase()} 跌到 ${
+        obj.belowTarget
+      } 以下囉~買起來買起來\nNext notification will be at price: ${obj.belowTarget -
+        obj.targetMove}`,
+      params
+    );
+    // belowPrice -= targetMove;
+    alertObj[index] = Object.assign(
+      {},
+      { ...obj, belowTarget: obj.belowTarget - obj.targetMove }
+    );
+  }
+  if (price && price.USD >= obj.aboveTarget) {
+    console.log(
+      `在 ${moment().format(
+        "lll"
+      )} 的時候，${obj.trackSymbol.toUpperCase()} 漲到 ${
+        obj.aboveTarget
+      } 以上辣~虎阿起來嗨!!!`
+    );
+    bot.postMessageToUser(
+      userToNotify,
+      `在 ${moment().format(
+        "lll"
+      )} 的時候，${obj.trackSymbol.toUpperCase()} 漲到 ${
+        obj.aboveTarget
+      } 以上辣~虎阿起來嗨!!!\nNext notification will be at price: ${obj.aboveTarget +
+        obj.targetMove}`,
+      params
+    );
+    // abovePrice += targetMove;
+    alertObj[index] = Object.assign(
+      {},
+      { ...obj, aboveTarget: obj.aboveTarget + obj.targetMove }
+    );
+  }
+}
 
 bot.on("start", function() {
   const syncer = setInterval(async () => {
-    // const price = await getBinancePrice();
-    const price = await getPrice(trackSymbol);
-    // console.log(price, moment().format("llll"));
-    if (price && price.USD <= belowPrice) {
-      console.log(
-        `在 ${moment().format(
-          "lll"
-        )} 的時候，${trackSymbol.toUpperCase()} 跌到 ${belowPrice} 以下囉~買起來買起來`
-      );
-      bot.postMessageToUser(
-        userToNotify,
-        `在 ${moment().format(
-          "lll"
-        )} 的時候，${trackSymbol.toUpperCase()} 跌到 ${belowPrice} 以下囉~買起來買起來\nNext notification will be at price: ${belowPrice -
-          targetMove}`,
-        params
-      );
-      belowPrice -= targetMove;
-      // bot.postMessageToUser(
-      //   userToNotify,
-      //   `Next notification will be at price: ${belowPrice}`,
-      //   params
-      // );
-      // console.log(belowPrice);
-    }
-    if (price && price.USD >= abovePrice) {
-      console.log(
-        `在 ${moment().format(
-          "lll"
-        )} 的時候，${trackSymbol.toUpperCase()} 漲到 ${abovePrice} 以上辣~虎阿起來嗨!!!`
-      );
-      bot.postMessageToUser(
-        userToNotify,
-        `在 ${moment().format(
-          "lll"
-        )} 的時候，${trackSymbol.toUpperCase()} 漲到 ${abovePrice} 以上辣~虎阿起來嗨!!!\nNext notification will be at price: ${abovePrice +
-          targetMove}`,
-        params
-      );
-      abovePrice += targetMove;
-      // bot.postMessageToUser(
-      //   userToNotify,
-      //   `Next notification will be at price: ${abovePrice}`,
-      //   params
-      // );
-    }
+    alertPrice.forEach(async (e, index) => {
+      await alertCheck(e, index);
+      console.log(alertObj);
+    });
   }, syncMinute * 60 * 1000);
 });
