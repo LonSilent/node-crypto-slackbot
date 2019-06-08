@@ -71,7 +71,6 @@ bot.on("start", function() {
   const syncer = setInterval(async () => {
     alertPrice.forEach(async (e, index) => {
       await alertCheck(e, index);
-      console.log(alertObj);
     });
   }, syncMinute * 60 * 1000);
 });
