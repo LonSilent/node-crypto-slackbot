@@ -1,4 +1,5 @@
 const coinList = ["BTC", "ETH", "XRP", "BNB"];
+const bitmexList = ["XBTUSD", "XBTU19", "XBTZ19", "ETHUSD"];
 
 // alert param
 const syncMinute = 2;
@@ -21,5 +22,5 @@ const alertObj = [
 
 const apiKey = "";
 
-export { coinList };
+export { coinList, bitmexList };
 export { syncMinute, userToNotify, alertObj, apiKey };

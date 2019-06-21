@@ -1,5 +1,6 @@
 import axios from "axios";
-import { coinList, apiKey } from "./const";
+import _ from "lodash";
+import { coinList, apiKey, bitmexList } from "./const";
 
 function addPlus(str) {
   return !str.includes("-") ? `(+${str}%)` : `(${str}%)`;
@@ -87,7 +88,7 @@ async function getBitmexPrice() {
     )
   ])).map(e => e.data[0]);
 
-  console.log(response[0]);
+  // console.log(response[0]);
 
   const XBT = {
     symbol: "XBTUSD",
@@ -108,4 +109,35 @@ async function getBitmexPrice() {
   return [XBT, ETH];
 }
 
-export { getPrice, getBinancePrice, getBitoPrice, getBitmexPrice };
+async function getBitmexPrice_v2() {
+  const queryString = bitmexList.map(x => {
+    return [
+      `https://www.bitmex.com/api/v1/trade/bucketed?symbol=${x}&binSize=1m&partial=true&count=1&reverse=true`,
+      `https://www.bitmex.com/api/v1/trade/bucketed?symbol=${x}&binSize=1d&partial=true&count=1&reverse=true`
+    ];
+  });
+  const response = await Promise.all(
+    queryString.map(async (x, index) => {
+      let result = (await Promise.all([axios.get(x[0]), axios.get(x[1])])).map(
+        e => e.data[0]
+      );
+      // console.log(result);
+      return {
+        symbol: bitmexList[index],
+        price: result[0].open,
+        highOf24hr: result[1].high,
+        lowOf24hr: result[1].low,
+        percentage: ""
+      };
+    })
+  );
+  return response;
+}
+
+export {
+  getPrice,
+  getBinancePrice,
+  getBitoPrice,
+  getBitmexPrice,
+  getBitmexPrice_v2
+};
