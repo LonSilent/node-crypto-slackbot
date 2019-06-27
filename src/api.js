@@ -134,10 +134,34 @@ async function getBitmexPrice_v2() {
   return response;
 }
 
+async function buildAlertObject() {
+  const btcPrice = await getPrice("btc");
+  const ethPrice = await getPrice("eth");
+
+  if (btcPrice.USD && ethPrice.USD) {
+    return [
+      {
+        trackSymbol: "btc",
+        belowTarget: Math.floor(btcPrice.USD / 100) * 100,
+        aboveTarget: Math.ceil(btcPrice.USD / 100) * 100,
+        targetMove: 100
+      },
+      {
+        trackSymbol: "eth",
+        belowTarget: Math.floor(ethPrice.USD / 10) * 10,
+        aboveTarget: Math.ceil(ethPrice.USD / 10) * 10,
+        targetMove: 10
+      }
+    ];
+  }
+  return undefined;
+}
+
 export {
   getPrice,
   getBinancePrice,
   getBitoPrice,
   getBitmexPrice,
-  getBitmexPrice_v2
+  getBitmexPrice_v2,
+  buildAlertObject
 };

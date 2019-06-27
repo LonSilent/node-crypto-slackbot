@@ -1,6 +1,6 @@
 import slackBot from "slackbots";
 import { SLACK_BOT_TOKEN } from "./src/slackAuthToken";
-import { getPrice } from "./src/api";
+import { getPrice, buildAlertObject } from "./src/api";
 import moment from "moment";
 import { syncMinute, userToNotify, alertObj } from "./src/const";
 
@@ -12,8 +12,6 @@ const bot = new slackBot({
 const params = {
   icon_emoji: ":miku2:"
 };
-
-let alertPrice = alertObj;
 
 async function alertCheck(obj, index) {
   const price = await getPrice(obj.trackSymbol);
@@ -67,10 +65,20 @@ async function alertCheck(obj, index) {
   }
 }
 
-bot.on("start", function() {
-  const syncer = setInterval(async () => {
-    alertPrice.forEach(async (e, index) => {
-      await alertCheck(e, index);
-    });
-  }, syncMinute * 60 * 1000);
-});
+async function main() {
+  const alertObjectTry = await buildAlertObject();
+
+  let alertPrice = alertObjectTry ? alertObjectTry : alertObj;
+
+  console.info(alertPrice);
+
+  bot.on("start", function() {
+    const syncer = setInterval(async () => {
+      alertPrice.forEach(async (e, index) => {
+        await alertCheck(e, index);
+      });
+    }, syncMinute * 60 * 1000);
+  });
+}
+
+main();
