@@ -15,7 +15,7 @@ const params = {
 
 async function alertCheck(obj, index) {
   const price = await getPrice(obj.trackSymbol);
-  console.log(price);
+  // console.log(price);
   if (price && price.USD <= obj.belowTarget) {
     console.log(
       `在 ${moment().format(
