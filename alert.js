@@ -13,6 +13,8 @@ const params = {
   icon_emoji: ":miku2:"
 };
 
+let alertPrice;
+
 async function alertCheck(obj, index) {
   const price = await getPrice(obj.trackSymbol);
   // console.log(price);
@@ -35,7 +37,7 @@ async function alertCheck(obj, index) {
       params
     );
     // belowPrice -= targetMove;
-    alertObj[index] = Object.assign(
+    alertPrice[index] = Object.assign(
       {},
       { ...obj, belowTarget: obj.belowTarget - obj.targetMove }
     );
@@ -59,14 +61,12 @@ async function alertCheck(obj, index) {
       params
     );
     // abovePrice += targetMove;
-    alertObj[index] = Object.assign(
+    alertPrice[index] = Object.assign(
       {},
       { ...obj, aboveTarget: obj.aboveTarget + obj.targetMove }
     );
   }
 }
-
-let alertPrice;
 
 async function main() {
   const alertObjectTry = await buildAlertObject();
