@@ -15,6 +15,7 @@ const params = {
 
 async function alertCheck(obj, index) {
   const price = await getPrice(obj.trackSymbol);
+  console.log(price);
   if (price && price.USD <= obj.belowTarget) {
     console.log(
       `在 ${moment().format(
@@ -65,20 +66,19 @@ async function alertCheck(obj, index) {
   }
 }
 
+let alertPrice;
+
 async function main() {
   const alertObjectTry = await buildAlertObject();
-
-  let alertPrice = alertObjectTry ? alertObjectTry : alertObj;
-
+  alertPrice = alertObjectTry ? alertObjectTry : alertObj;
   console.info(alertPrice);
-
-  bot.on("start", function() {
-    const syncer = setInterval(async () => {
-      alertPrice.forEach(async (e, index) => {
-        await alertCheck(e, index);
-      });
-    }, syncMinute * 60 * 1000);
-  });
 }
 
 main();
+bot.on("start", function() {
+  const syncer = setInterval(async () => {
+    alertPrice.forEach(async (e, index) => {
+      await alertCheck(e, index);
+    });
+  }, syncMinute * 60 * 1000);
+});
