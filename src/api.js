@@ -1,6 +1,7 @@
 import axios from "axios";
 import _ from "lodash";
 import { coinList, apiKey, bitmexList } from "./const";
+import { btcTargetMove, ethTargetMove } from "./const";
 
 function addPlus(str) {
   return !str.includes("-") ? `(+${str}%)` : `(${str}%)`;
@@ -142,15 +143,15 @@ async function buildAlertObject() {
     return [
       {
         trackSymbol: "btc",
-        belowTarget: Math.floor(btcPrice.USD / 100) * 100,
-        aboveTarget: Math.ceil(btcPrice.USD / 100) * 100,
-        targetMove: 100
+        belowTarget: Math.floor(btcPrice.USD / btcTargetMove) * btcTargetMove,
+        aboveTarget: Math.ceil(btcPrice.USD / btcTargetMove) * btcTargetMove,
+        targetMove: btcTargetMove
       },
       {
         trackSymbol: "eth",
-        belowTarget: Math.floor(ethPrice.USD / 10) * 10,
-        aboveTarget: Math.ceil(ethPrice.USD / 10) * 10,
-        targetMove: 10
+        belowTarget: Math.floor(ethPrice.USD / ethTargetMove) * ethTargetMove,
+        aboveTarget: Math.ceil(ethPrice.USD / ethTargetMove) * ethTargetMove,
+        targetMove: ethTargetMove
       }
     ];
   }

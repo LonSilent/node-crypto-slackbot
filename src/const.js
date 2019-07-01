@@ -20,7 +20,11 @@ const alertObj = [
   }
 ];
 
+const btcTargetMove = 100;
+const ethTargetMove = 5;
+
 const apiKey = "";
 
 export { coinList, bitmexList };
 export { syncMinute, userToNotify, alertObj, apiKey };
+export { btcTargetMove, ethTargetMove };
