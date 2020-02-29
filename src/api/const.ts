@@ -1,5 +1,5 @@
 const coinList = ["BTC", "ETH", "XRP", "BNB"];
-const bitmexList = ["XBTUSD", "XBTU19", "XBTZ19", "ETHUSD"];
+const bitmexList = ["XBTUSD", "ETHUSD"];
 
 // alert param
 const syncMinute = 2;

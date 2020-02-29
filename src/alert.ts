@@ -1,8 +1,8 @@
 import slackBot from "slackbots";
-import { SLACK_BOT_TOKEN } from "./src/slackAuthToken";
-import { getPrice, buildAlertObject } from "./src/api";
+import { SLACK_BOT_TOKEN } from "./slackAuthToken";
+import { getPrice, buildAlertObject } from "./api";
 import moment from "moment";
-import { syncMinute, userToNotify, alertObj } from "./src/const";
+import { syncMinute, userToNotify, alertObj } from "./api/const";
 
 const bot = new slackBot({
   token: SLACK_BOT_TOKEN,

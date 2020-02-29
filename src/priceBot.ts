@@ -1,12 +1,18 @@
 import slackBot from "slackbots";
-import { SLACK_BOT_TOKEN } from "./src/slackAuthToken";
+import { SLACK_BOT_TOKEN } from "./slackAuthToken";
 import {
   getBinancePrice,
   getPrice,
   getBitoPrice,
   getBitmexPrice,
   getBitmexPrice_v2
-} from "./src/api";
+} from "./api";
+
+interface priceInfo {
+  symbol: string;
+  USD: number;
+  BTC: number;
+}
 
 const bot = new slackBot({
   token: SLACK_BOT_TOKEN,
@@ -27,7 +33,7 @@ bot.on("message", async data => {
         const target = splitMessage.slice(1);
         const price = (await Promise.all(target.map(x => getPrice(x)))).filter(
           x => x !== undefined
-        );
+        ) as priceInfo[];
         console.log("=====================");
         console.log("symbol price\n", price);
         console.log("=====================");

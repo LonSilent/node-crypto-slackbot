@@ -1,0 +1,18 @@
+{
+  "ticket": {
+    "general": ["BTC", "ETH", "XRP", "BNB"],
+    "bitmex": ["XBT", "ETH"],
+    "syncMinute": 2,
+    "targetMove": {
+      "BTC": 100,
+      "ETH": 5
+    }
+  },
+  "key": {
+    "slackbot": "",
+    "minApi": ""
+  },
+  "bot": {
+    "userTonotify": ""
+  }
+}
