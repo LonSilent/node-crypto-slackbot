@@ -1,12 +1,6 @@
 import slackBot from "slackbots";
-import { SLACK_BOT_TOKEN } from "./slackAuthToken";
-import {
-  getBinancePrice,
-  getPrice,
-  getBitoPrice,
-  getBitmexPrice,
-  getBitmexPrice_v2
-} from "./api";
+import { getBinancePrice, getPrice, getBitoPrice, getBitmexPrice } from "./api";
+import { SLACK_BOT_TOKEN } from "./api/const";
 
 interface priceInfo {
   symbol: string;
@@ -94,7 +88,7 @@ bot.on("message", async data => {
   if (data.type === "message") {
     const message = data.text.toLowerCase();
     if (message.startsWith("mex")) {
-      const price = await getBitmexPrice_v2();
+      const price = await getBitmexPrice();
       console.log("=====================");
       console.log("mex price\n", price);
       console.log("=====================");

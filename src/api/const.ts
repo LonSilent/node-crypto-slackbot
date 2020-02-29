@@ -1,30 +1,18 @@
-const coinList = ["BTC", "ETH", "XRP", "BNB"];
-const bitmexList = ["XBTUSD", "ETHUSD"];
+import config from "config";
+
+const coinList: Array<string> = config.get("ticket.general");
+const bitmexList: Array<string> = config.get("ticket.bitmex");
 
 // alert param
-const syncMinute = 2;
-const userToNotify = "lonsilent";
+const syncMinute: number = config.get("ticket.syncMinute");
+const userToNotify: string = config.get("bot.userToNotify");
 
-const alertObj = [
-  {
-    trackSymbol: "eth",
-    belowTarget: 240,
-    aboveTarget: 250,
-    targetMove: 5
-  },
-  {
-    trackSymbol: "btc",
-    belowTarget: 7900,
-    aboveTarget: 8000,
-    targetMove: 100
-  }
-];
+const btcTargetMove: number = config.get("ticket.targetMove.BTC");
+const ethTargetMove: number = config.get("ticket.targetMove.ETH");
 
-const btcTargetMove = 100;
-const ethTargetMove = 5;
-
-const apiKey = "";
+const apiKey: string = config.get("key.minApi");
+const SLACK_BOT_TOKEN: string = config.get("key.slackbot");
 
 export { coinList, bitmexList };
-export { syncMinute, userToNotify, alertObj, apiKey };
+export { syncMinute, userToNotify, apiKey, SLACK_BOT_TOKEN };
 export { btcTargetMove, ethTargetMove };

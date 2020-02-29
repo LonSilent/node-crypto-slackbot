@@ -1,7 +1,12 @@
 import axios from "axios";
 import _ from "lodash";
-import { coinList, apiKey, bitmexList } from "./const";
-import { btcTargetMove, ethTargetMove } from "./const";
+import {
+  coinList,
+  apiKey,
+  bitmexList,
+  btcTargetMove,
+  ethTargetMove
+} from "./const";
 
 interface cryptoInfo {
   USDT: {
@@ -95,45 +100,6 @@ async function getBitoPrice() {
 }
 
 async function getBitmexPrice() {
-  const response = (
-    await Promise.all([
-      axios.get(
-        `https://www.bitmex.com/api/v1/trade/bucketed?symbol=XBTUSD&binSize=1m&partial=true&count=1&reverse=true`
-      ),
-      axios.get(
-        `https://www.bitmex.com/api/v1/trade/bucketed?symbol=XBTUSD&binSize=1d&partial=true&count=1&reverse=true`
-      ),
-      axios.get(
-        `https://www.bitmex.com/api/v1/trade/bucketed?symbol=ETHUSD&binSize=1m&partial=true&count=1&reverse=true`
-      ),
-      axios.get(
-        `https://www.bitmex.com/api/v1/trade/bucketed?symbol=ETHUSD&binSize=1d&partial=true&count=1&reverse=true`
-      )
-    ])
-  ).map(e => e.data[0]);
-
-  // console.log(response[0]);
-
-  const XBT = {
-    symbol: "XBTUSD",
-    price: response[0].open,
-    highOf24hr: response[1].high,
-    lowOf24hr: response[1].low,
-    percentage: ""
-  };
-
-  const ETH = {
-    symbol: "ETHUSD",
-    price: response[2].open,
-    highOf24hr: response[3].high,
-    lowOf24hr: response[3].low,
-    percentage: ""
-  };
-
-  return [XBT, ETH];
-}
-
-async function getBitmexPrice_v2() {
   const queryString = bitmexList.map(x => {
     return [
       `https://www.bitmex.com/api/v1/trade/bucketed?symbol=${x}&binSize=1m&partial=true&count=1&reverse=true`,
@@ -186,6 +152,5 @@ export {
   getBinancePrice,
   getBitoPrice,
   getBitmexPrice,
-  getBitmexPrice_v2,
   buildAlertObject
 };

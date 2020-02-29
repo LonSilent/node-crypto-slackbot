@@ -1,7 +1,7 @@
 {
   "ticket": {
     "general": ["BTC", "ETH", "XRP", "BNB"],
-    "bitmex": ["XBT", "ETH"],
+    "bitmex": ["XBTUSD", "ETHUSD"],
     "syncMinute": 2,
     "targetMove": {
       "BTC": 100,
@@ -13,6 +13,6 @@
     "minApi": ""
   },
   "bot": {
-    "userTonotify": ""
+    "userToNotify": ""
   }
 }

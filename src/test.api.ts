@@ -3,14 +3,14 @@ import {
   getBinancePrice,
   // getBitoPrice,
   // getBitmexPrice,
-  getBitmexPrice_v2
+  getBitmexPrice
 } from "./api";
 
 async function main() {
   const result = await Promise.all([
     getPrice("eth"),
     getBinancePrice(),
-    getBitmexPrice_v2()
+    getBitmexPrice()
   ]);
 
   console.log(result);

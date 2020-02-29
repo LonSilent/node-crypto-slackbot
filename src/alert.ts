@@ -1,8 +1,7 @@
 import slackBot from "slackbots";
-import { SLACK_BOT_TOKEN } from "./slackAuthToken";
 import { getPrice, buildAlertObject } from "./api";
 import moment from "moment";
-import { syncMinute, userToNotify, alertObj } from "./api/const";
+import { syncMinute, userToNotify, SLACK_BOT_TOKEN } from "./api/const";
 
 const bot = new slackBot({
   token: SLACK_BOT_TOKEN,
@@ -69,8 +68,7 @@ async function alertCheck(obj, index) {
 }
 
 async function main() {
-  const alertObjectTry = await buildAlertObject();
-  alertPrice = alertObjectTry ? alertObjectTry : alertObj;
+  alertPrice = await buildAlertObject();
   console.info(alertPrice);
 }
 
