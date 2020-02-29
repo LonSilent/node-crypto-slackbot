@@ -11,6 +11,7 @@
     "bot": "tsc && pm2 start ./dist/priceBot.js",
     "alert": "tsc && pm2 start ./dist/alert.js",
     "test-api": "tsc && node ./dist/test.api.js",
+    "list-pm2": "pm2 ls",
     "clean": "rm -rf ./dist"
   },
   "dependencies": {
