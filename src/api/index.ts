@@ -5,7 +5,7 @@ import {
   apiKey,
   bitmexList,
   btcTargetMove,
-  ethTargetMove
+  ethTargetMove,
 } from "./const";
 
 interface cryptoInfo {
@@ -25,14 +25,22 @@ interface priceInfo {
   BTC: number;
 }
 
+interface bitmexInfo {
+  symbol: string;
+  lastPrice: number;
+  lowPrice: number;
+  highPrice: number;
+  fundingRate: number;
+  lastChangePcnt: number;
+  indicativeFundingRate: number;
+}
+
 function addPlus(str) {
   return !str.includes("-") ? `(+${str}%)` : `(${str}%)`;
 }
 
-function toFixedTwo(str) {
-  return Number(str)
-    .toFixed(2)
-    .toString();
+function toFixed(str: string | number, fixed: number) {
+  return Number(str).toFixed(fixed).toString();
 }
 
 async function getPrice(symbol) {
@@ -66,7 +74,7 @@ async function getBinancePrice() {
         price: x[1].USDT.PRICE.slice(2),
         highOf24hr: x[1].USDT.HIGH24HOUR.slice(2),
         lowOf24hr: x[1].USDT.LOW24HOUR.slice(2),
-        percentage: addPlus(x[1].USDT.CHANGEPCT24HOUR)
+        percentage: addPlus(x[1].USDT.CHANGEPCT24HOUR),
       };
     }
   );
@@ -79,48 +87,60 @@ async function getBitoPrice() {
   const response = (
     await Promise.all([
       axios.get(`https://api.bitopro.com/v2/tickers/btc_twd`),
-      axios.get(`https://api.bitopro.com/v2/tickers/eth_twd`)
+      axios.get(`https://api.bitopro.com/v2/tickers/eth_twd`),
     ])
   )
-    .filter(e => e.status === 200)
-    .map(e => e.data.data);
+    .filter((e) => e.status === 200)
+    .map((e) => e.data.data);
   if (response.length === 0) {
     return undefined;
   }
-  const resultMapping = response.map(x => {
+  const resultMapping = response.map((x) => {
     return {
       symbol: x.pair,
-      price: toFixedTwo(x.lastPrice),
-      highOf24hr: toFixedTwo(x.high24hr),
-      lowOf24hr: toFixedTwo(x.low24hr),
-      percentage: addPlus(x.priceChange24hr)
+      price: toFixed(x.lastPrice, 2),
+      highOf24hr: toFixed(x.high24hr, 2),
+      lowOf24hr: toFixed(x.low24hr, 2),
+      percentage: addPlus(x.priceChange24hr),
     };
   });
   return resultMapping;
 }
 
 async function getBitmexPrice() {
-  const queryString = bitmexList.map(x => {
-    return [
-      `https://www.bitmex.com/api/v1/trade/bucketed?symbol=${x}&binSize=1m&partial=true&count=1&reverse=true`,
-      `https://www.bitmex.com/api/v1/trade/bucketed?symbol=${x}&binSize=1d&partial=true&count=1&reverse=true`
-    ];
-  });
+  const columns = [
+    "lastPrice",
+    "lowPrice",
+    "highPrice",
+    "fundingRate",
+    "lastChangePcnt",
+    "indicativeFundingRate",
+  ];
+  const queryString = bitmexList.map(
+    (x) =>
+      `https://www.bitmex.com/api/v1/instrument?symbol=${x}&columns=${columns.join(
+        "%2C"
+      )}&count=1&reverse=false`
+  );
+  console.info(queryString);
   const response = await Promise.all(
     queryString.map(async (x, index) => {
-      let result = (await Promise.all([axios.get(x[0]), axios.get(x[1])])).map(
-        e => e.data[0]
-      );
-      // console.log(result);
+      let result: bitmexInfo = (await axios.get(x)).data[0];
       return {
-        symbol: bitmexList[index],
-        price: result[0].open,
-        highOf24hr: result[1].high,
-        lowOf24hr: result[1].low,
-        percentage: ""
+        symbol: result.symbol,
+        price: result.lastPrice.toString(),
+        highOf24hr: result.highPrice.toString(),
+        lowOf24hr: result.lowPrice.toString(),
+        fundingRate: `${toFixed(result.fundingRate * 100, 4)}%`,
+        indicativeFundingRate: `${toFixed(
+          result.indicativeFundingRate * 100,
+          4
+        )}%`,
+        percentage: `${toFixed(result.fundingRate * 100, 2)}%`,
       };
     })
   );
+
   return response;
 }
 
@@ -134,14 +154,14 @@ async function buildAlertObject() {
         trackSymbol: "btc",
         belowTarget: Math.floor(btcPrice.USD / btcTargetMove) * btcTargetMove,
         aboveTarget: Math.ceil(btcPrice.USD / btcTargetMove) * btcTargetMove,
-        targetMove: btcTargetMove
+        targetMove: btcTargetMove,
       },
       {
         trackSymbol: "eth",
         belowTarget: Math.floor(ethPrice.USD / ethTargetMove) * ethTargetMove,
         aboveTarget: Math.ceil(ethPrice.USD / ethTargetMove) * ethTargetMove,
-        targetMove: ethTargetMove
-      }
+        targetMove: ethTargetMove,
+      },
     ];
   }
   return undefined;
@@ -152,5 +172,5 @@ export {
   getBinancePrice,
   getBitoPrice,
   getBitmexPrice,
-  buildAlertObject
+  buildAlertObject,
 };
