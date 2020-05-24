@@ -100,9 +100,9 @@ bot.on("message", async (data) => {
             (x) =>
               `${x.symbol.toUpperCase()}\n[price] ${x.price}\n[high_24hr] ${
                 x.highOf24hr
-              }\n[low_24hr] ${x.lowOf24hr}\n[fundingRate] ${
-                x.fundingRate
-              }\n[indicativeFundingRate] ${x.indicativeFundingRate}`
+              }\n[low_24hr] ${x.lowOf24hr}\n[fundingRate] ${x.fundingRate} ${
+                x.indicativeFundingRate
+              }`
           )
           .join("\n")
           .trim();
