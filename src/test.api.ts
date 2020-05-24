@@ -1,16 +1,11 @@
-import {
-  getPrice,
-  getBinancePrice,
-  // getBitoPrice,
-  // getBitmexPrice,
-  getBitmexPrice
-} from "./api";
+import { PriceFetcher } from "./api";
 
 async function main() {
   const result = await Promise.all([
-    getPrice("eth"),
-    getBinancePrice(),
-    getBitmexPrice()
+    // PriceFetcher.getPriceBySymbol("eth"),
+    // PriceFetcher.getBinancePrice(),
+    // PriceFetcher.getBitmexPrice()
+    PriceFetcher.getBinanceFuture()
   ]);
 
   console.log(result);

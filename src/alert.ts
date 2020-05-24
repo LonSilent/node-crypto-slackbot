@@ -1,5 +1,5 @@
 import slackBot from "slackbots";
-import { getPrice, buildAlertObject } from "./api";
+import { PriceFetcher, buildAlertObject } from "./api";
 import moment from "moment";
 import { syncMinute, userToNotify, SLACK_BOT_TOKEN } from "./api/const";
 
@@ -15,7 +15,7 @@ const params = {
 let alertPrice;
 
 async function alertCheck(obj, index) {
-  const price = await getPrice(obj.trackSymbol);
+  const price = await PriceFetcher.getPriceBySymbol(obj.trackSymbol);
   // console.log(price);
   if (price && price.USD <= obj.belowTarget) {
     console.log(
@@ -23,7 +23,7 @@ async function alertCheck(obj, index) {
         "lll"
       )} 的時候，${obj.trackSymbol.toUpperCase()} 跌到 ${
         obj.belowTarget
-      } 以下囉~買起來買起來`
+      } 以下囉~`
     );
     bot.postMessageToUser(
       userToNotify,
@@ -31,7 +31,7 @@ async function alertCheck(obj, index) {
         "lll"
       )} 的時候，${obj.trackSymbol.toUpperCase()} 跌到 ${
         obj.belowTarget
-      } 以下囉~買起來買起來\nNext notification will be at price: ${
+      } 以下囉~\nNext notification will be at price: ${
         obj.belowTarget - obj.targetMove
       }`,
       params
@@ -48,7 +48,7 @@ async function alertCheck(obj, index) {
         "lll"
       )} 的時候，${obj.trackSymbol.toUpperCase()} 漲到 ${
         obj.aboveTarget
-      } 以上辣~虎阿起來嗨!!!`
+      } 以上囉~`
     );
     bot.postMessageToUser(
       userToNotify,
@@ -56,7 +56,7 @@ async function alertCheck(obj, index) {
         "lll"
       )} 的時候，${obj.trackSymbol.toUpperCase()} 漲到 ${
         obj.aboveTarget
-      } 以上辣~虎阿起來嗨!!!\nNext notification will be at price: ${
+      } 以上囉~\nNext notification will be at price: ${
         obj.aboveTarget + obj.targetMove
       }`,
       params

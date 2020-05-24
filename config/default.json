@@ -2,6 +2,7 @@
   "ticket": {
     "general": ["BTC", "ETH", "XRP", "BNB"],
     "bitmex": ["XBTUSD", "ETHUSD"],
+    "binanceFuture": ["BTCUSDT", "ETHUSDT"],
     "syncMinute": 2,
     "targetMove": {
       "BTC": 100,

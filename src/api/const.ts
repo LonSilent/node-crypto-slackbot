@@ -2,6 +2,7 @@ import config from "config";
 
 const coinList: Array<string> = config.get("ticket.general");
 const bitmexList: Array<string> = config.get("ticket.bitmex");
+const binanceFutureList: Array<string> = config.get("ticket.binanceFuture");
 
 // alert param
 const syncMinute: number = config.get("ticket.syncMinute");
@@ -13,6 +14,6 @@ const ethTargetMove: number = config.get("ticket.targetMove.ETH");
 const apiKey: string = config.get("key.minApi");
 const SLACK_BOT_TOKEN: string = config.get("key.slackbot");
 
-export { coinList, bitmexList };
+export { coinList, bitmexList, binanceFutureList };
 export { syncMinute, userToNotify, apiKey, SLACK_BOT_TOKEN };
 export { btcTargetMove, ethTargetMove };
