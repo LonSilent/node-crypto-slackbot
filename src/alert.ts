@@ -5,11 +5,11 @@ import { syncMinute, userToNotify, SLACK_BOT_TOKEN } from "./api/const";
 
 const bot = new slackBot({
   token: SLACK_BOT_TOKEN,
-  name: "node-crypto-slackbot"
+  name: "キャルちゃん",
 });
 
 const params = {
-  icon_emoji: ":miku2:"
+  icon_emoji: ":kyaru2:",
 };
 
 let alertPrice;
@@ -31,8 +31,9 @@ async function alertCheck(obj, index) {
         "lll"
       )} 的時候，${obj.trackSymbol.toUpperCase()} 跌到 ${
         obj.belowTarget
-      } 以下囉~買起來買起來\nNext notification will be at price: ${obj.belowTarget -
-        obj.targetMove}`,
+      } 以下囉~買起來買起來\nNext notification will be at price: ${
+        obj.belowTarget - obj.targetMove
+      }`,
       params
     );
     // belowPrice -= targetMove;
@@ -55,8 +56,9 @@ async function alertCheck(obj, index) {
         "lll"
       )} 的時候，${obj.trackSymbol.toUpperCase()} 漲到 ${
         obj.aboveTarget
-      } 以上辣~虎阿起來嗨!!!\nNext notification will be at price: ${obj.aboveTarget +
-        obj.targetMove}`,
+      } 以上辣~虎阿起來嗨!!!\nNext notification will be at price: ${
+        obj.aboveTarget + obj.targetMove
+      }`,
       params
     );
     // abovePrice += targetMove;
@@ -73,7 +75,7 @@ async function main() {
 }
 
 main();
-bot.on("start", function() {
+bot.on("start", function () {
   const syncer = setInterval(async () => {
     alertPrice.forEach(async (e, index) => {
       await alertCheck(e, index);
